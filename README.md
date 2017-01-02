@@ -8,10 +8,10 @@ Usage:
 
 ```
 import (
-  "github.com/MeteoGroup/go-metrics-prometheus"
   "github.com/prometheus/client_golang/prometheus/promhttp"
   "github.com/prometheus/client_golang/prometheus"
   metrics "github.com/rcrowley/go-metrics"
+  promReg "github.com/MeteoGroup/go-metrics-prometheus"
   )
 
 // create metrics registry
@@ -20,13 +20,13 @@ appGauge := metrics.GetOrRegisterGauge("m1", metricsRegistry)
 appGauge.Update(1)
 
 // register in prometheus
-pClient := NewPrometheusProvider(metricsRegistry, "test", "subsys", 1*time.Second)
+pClient := promReg.NewPrometheusProvider(metricsRegistry, "test", "subsys", 1*time.Second)
 go pClient.UpdatePrometheusMetrics()
 
 // export http for prometheus
 
 go func() {
-  http.Handle("/metrics", promhttp.HandlerFor(promClient.promRegistry, promhttp.HandlerOpts{}))
+  http.Handle("/metrics", promhttp.HandlerFor(promClient.PromRegistry, promhttp.HandlerOpts{}))
   log.Fatal(http.ListenAndServe(":8080", nil))
 }()
 
