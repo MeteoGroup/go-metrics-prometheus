@@ -16,7 +16,7 @@ type PrometheusConfig struct {
 	namespace     string
 	Registry      metrics.Registry // Registry to be exported
 	subsystem     string
-	promRegistry  *prometheus.Registry //Prometheus registry
+	PromRegistry  *prometheus.Registry //Prometheus registry
 	FlushInterval time.Duration        //interval to update prom metrics
 	gauges        map[string]prometheus.Gauge
 	gaugeVecs     map[string]prometheus.GaugeVec
@@ -34,7 +34,7 @@ func NewPrometheusProvider(r metrics.Registry, namespace string, subsystem strin
 		namespace:     namespace,
 		subsystem:     subsystem,
 		Registry:      r,
-		promRegistry:  promReg,
+		PromRegistry:  promReg,
 		FlushInterval: FlushInterval,
 		gauges:        make(map[string]prometheus.Gauge),
 		gaugeVecs:     make(map[string]prometheus.GaugeVec),
@@ -63,7 +63,7 @@ func (c *PrometheusConfig) meterVec(name string, snap metrics.Meter) {
 				"type",
 			},
 		)
-		c.promRegistry.MustRegister(g)
+		c.PromRegistry.MustRegister(g)
 		c.gaugeVecs[key] = g
 	}
 
@@ -88,7 +88,7 @@ func (c *PrometheusConfig) histogramVec(name string, snap metrics.Histogram) {
 				"type",
 			},
 		)
-		c.promRegistry.MustRegister(g)
+		c.PromRegistry.MustRegister(g)
 		c.gaugeVecs[key] = g
 	}
 	g.WithLabelValues("count").Set(float64(snap.Count()))
@@ -112,7 +112,7 @@ func (c *PrometheusConfig) gaugeFromNameAndValue(name string, val float64) {
 			Name:      c.flattenKey(name),
 			Help:      name,
 		})
-		c.promRegistry.MustRegister(g)
+		c.PromRegistry.MustRegister(g)
 		c.gauges[key] = g
 	}
 	g.Set(val)

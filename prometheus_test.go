@@ -20,7 +20,7 @@ func TestUpdatePrometheusMetricsOnce(t *testing.T) {
 		Name:      "counter",
 		Help:      "counter",
 	})
-	err := pClient.promRegistry.Register(gauge)
+	err := pClient.PromRegistry.Register(gauge)
 	if err == nil {
 		t.Fatalf("Go-metrics registry didn't get registered to prometheus registry")
 	}
@@ -39,7 +39,7 @@ func TestUpdatePrometheusMetrics(t *testing.T) {
 		Name:      "counter",
 		Help:      "counter",
 	})
-	err := pClient.promRegistry.Register(gauge)
+	err := pClient.PromRegistry.Register(gauge)
 	if err == nil {
 		t.Fatalf("Go-metrics registry didn't get registered to prometheus registry")
 	}
@@ -55,7 +55,7 @@ func TestPrometheusMetricsGetUpdated(t *testing.T) {
 	go pClient.UpdatePrometheusMetrics()
 	cntr.Inc(13)
 	time.Sleep(5 * time.Second)
-	metrics, _ := pClient.promRegistry.Gather()
+	metrics, _ := pClient.PromRegistry.Gather()
 	serialized := fmt.Sprint(metrics[0])
 	expected := fmt.Sprintf("name:\"a_a_counter\" help:\"counter\" type:GAUGE metric:<gauge:<value:%d > > ", cntr.Count())
 	if serialized != expected {
