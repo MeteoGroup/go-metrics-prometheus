@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/prometheus/client_golang/prometheus.v0.8.0"
+	"github.com/prometheus/client_golang/tree/v0.8.0"
 	"github.com/rcrowley/go-metrics"
 )
 
