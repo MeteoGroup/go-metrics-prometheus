@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/prometheus/client_golang/tree/v0.8.0"
+	"github.com/prometheus/client_golang"
 	"github.com/rcrowley/go-metrics"
 )
 
@@ -27,7 +27,7 @@ type PrometheusConfig struct {
 func NewPrometheusProvider(r metrics.Registry, namespace string, subsystem string, FlushInterval time.Duration) *PrometheusConfig {
 	promReg := prometheus.NewRegistry()
 	// register some go metrics
-	promReg.MustRegister(prometheus.NewProcessCollector(os.Getpid(), ""))
+	promReg.MustRegister(prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}))
 	promReg.MustRegister(prometheus.NewGoCollector())
 
 	return &PrometheusConfig{
